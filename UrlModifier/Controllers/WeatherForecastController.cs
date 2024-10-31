@@ -1,33 +1,34 @@
+using Contracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace UrlModifier.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    [Route("url")]
+    public class UrlController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        private readonly IUrlLogic _urlLogic;
 
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public UrlController(IUrlLogic urlLogic)
         {
-            _logger = logger;
+            _urlLogic = urlLogic;
         }
 
-        [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+
+        [HttpGet("encode/{url}")]
+        public IActionResult EncodeUrl(string url)
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            _urlLogic.EncodeUrl(url);
+
+            return Ok("ok");
         }
+
+        [HttpGet("decode/{url}")]
+        public IActionResult DecodeUrl(string url)
+        {
+            _urlLogic.DecodeUrl(url);   
+            return Ok("ok");
+        }
+
     }
 }
