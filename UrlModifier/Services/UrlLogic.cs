@@ -16,7 +16,7 @@ namespace UrlModifier.Services
    
         public string DecodeUrl(string url)
         {
-            throw new NotImplementedException();
+            return Uri.UnescapeDataString(url);
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace UrlModifier.Services
         /// <returns>The encoded url </returns>
         public string EncodeUrl(string url)
         {
-            throw new NotImplementedException();
+            return Uri.EscapeDataString(url);
         }
     }
 }

@@ -26,8 +26,8 @@ namespace UrlModifier.Controllers
         /// <param name="url">url user wants to encode</param>
         /// <returns>encoded url in json</returns>
 
-        [HttpGet("encode/{url}")]
-        public IActionResult EncodeUrl(string url)
+        [HttpGet("encode")]
+        public IActionResult EncodeUrl([FromQuery] string url)
         {
             string encodedUrl = _urlLogic.EncodeUrl(url);
 
@@ -35,7 +35,7 @@ namespace UrlModifier.Controllers
             {
                 return new JsonResult(new {encodedUrl});
             }
-            return new JsonResult(new { message = "Url user enterd was not valid" });
+            return BadRequest("Url user enterd was not valid");
         }
 
         /// <summary>
@@ -44,12 +44,18 @@ namespace UrlModifier.Controllers
         /// <param name="url">url user wants to decode</param>
         /// <returns>decoded url in json</returns>
 
-        [HttpGet("decode/{url}")]
-        public IActionResult DecodeUrl(string url)
+        [HttpGet("decode")]
+        public IActionResult DecodeUrl([FromQuery] string url)
         {
-            _urlLogic.DecodeUrl(url);   
-            return Ok("ok");
+            string decodedUrl = _urlLogic.DecodeUrl(url);
+
+            if (decodedUrl is not null)
+            {
+                return new JsonResult(new { decodedUrl });
+            }
+            return BadRequest("Url user enterd was not valid");
         }
+    }
 
     }
-}
+
